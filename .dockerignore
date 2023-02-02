@@ -1,3 +1,5 @@
 venv/
 .dockerignore
 .gitignore
+__pycache__/
+.pytest_cache/
