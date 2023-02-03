@@ -2,8 +2,7 @@ version: '3'
 
 services:
   api:
-    build: .
-    image: kapizany/projeto-aplicado-api
+    image: capizani/projeto-aplicado-api
     container_name: projeto-aplicado-api
     ports:
       - 8000:8000
