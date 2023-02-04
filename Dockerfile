@@ -6,6 +6,7 @@ EXPOSE 8000
 
 COPY . .
 
+RUN apk add --update libpq-dev python3-dev build-essential
 RUN pip install -r requirements.txt
 
 CMD python3 main.py
