@@ -4,6 +4,8 @@ services:
   api:
     image: capizani/projeto-aplicado-api
     container_name: projeto-aplicado-api
+    env_file:
+      - .env
     ports:
       - 8000:8000
     volumes:
