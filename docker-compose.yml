@@ -2,8 +2,11 @@ version: '3'
 
 services:
   api:
-    image: capizani/projeto-aplicado-api
+    # image: capizani/projeto-aplicado-api
+    build: .
+    image: pa-api-image
     container_name: projeto-aplicado-api
+    command: python3 main.py
     env_file:
       - .env
     ports:
