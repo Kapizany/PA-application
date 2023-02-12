@@ -12,6 +12,11 @@ from config.cognito import cognito
 class UserService:
     
     @staticmethod
+    def get_user_by_access_token(token):
+        response = cognito.get_user(AccessToken=token)
+        return response
+    
+    @staticmethod
     def retrieve_by_id(user_id):
         user = UserModel.query.filter_by(id=user_id).first()
         if not user:
@@ -48,13 +53,33 @@ class UserService:
         else:
             db.session.commit()
             return new_user
+    
+    @staticmethod
+    def confirm_user(username):
+        cognito.admin_confirm_sign_up(
+            UserPoolId=os.getenv("COGNITO_POOL_ID"),
+            Username=username,
+        )
+        return
+        
+        
     @staticmethod
     def login(payload):
-        email = payload.get('email')
+        username = payload.get('username')
         password = payload.get('password')
         
-        cognito.sign_up(
+        response = cognito.initiate_auth(
                 ClientId=os.getenv("COGNITO_USER_CLIENT_ID"),
-                Username=email,
-                Password=password
-            )
+                AuthFlow='USER_PASSWORD_AUTH',
+                AuthParameters={
+                    'USERNAME': username,
+                    'PASSWORD': password,
+                }
+        )
+        
+        return {
+            "AccessToken": response["AuthenticationResult"].get("AccessToken"),
+            "ExpiresIn": response["AuthenticationResult"].get("ExpiresIn"),
+            "TokenType": response["AuthenticationResult"].get("TokenType"),
+            "RefreshToken": response["AuthenticationResult"].get("RefreshToken")
+        }
