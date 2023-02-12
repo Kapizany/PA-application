@@ -21,12 +21,28 @@ responser_user = api.model('ResponseUser', {
     "avatar_path": fields.String(),
 })
 
+confirm_user_input = api.model('ConfirmUserInput', {
+    "username": fields.String()
+})
+
+response_login = api.model('ResponseLogin', {
+    "AccessToken": fields.String(),
+    "ExpiresIn": fields.String(),
+    "TokenType": fields.String(),
+    "RefreshToken": fields.String(),
+    
+})
+
+token_input_parser = reqparse.RequestParser()
+token_input_parser.add_argument('Authorization', location='headers')
+
 
 @api.route('/users/<string:user_id>')
 class UserResource(Resource):
     @api.marshal_with(responser_user)
     def get(self, user_id):
         return UserService.retrieve_by_id(user_id)
+    
 
 
 @api.route('/users')
@@ -42,11 +58,28 @@ class UserResource(Resource):
             "username": new_user.username,
             "avatar_path": new_user.avatar_path
         }
+    @api.expect(token_input_parser)
+    def get(sef):
+        args = token_input_parser.parse_args()
+        access_token = args.get("Authorization")
+        print(UserService.get_user_by_access_token(access_token))
+        return {
+            "msg": "Token Ok"
+        }
 
 
 @api.route('/users/login')
 class UserLoginResource(Resource):
-    @api.marshal_with(responser_user)
+    @api.marshal_with(response_login)
     @api.expect(login_user_input)
     def post(self):
         return UserService.login(api.payload)
+
+
+@api.route('/users/confirm')
+class UseConfirmResource(Resource):
+    @api.expect(confirm_user_input)
+    def post(self):
+        username = api.payload.get("username")
+        UserService.confirm_user(username)
+
