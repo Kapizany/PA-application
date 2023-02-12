@@ -5,3 +5,8 @@ __pycache__/
 .pytest_cache/
 .env
 .vscode/
+elasticsearch_data/
+.beats/
+.github/
+Dockerfile
+docker-compose.yml
