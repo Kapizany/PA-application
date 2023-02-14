@@ -1,6 +1,6 @@
 from flask_restx import Resource, fields, reqparse
 from werkzeug.datastructures import FileStorage
-from config.api import api
+from config.api import api, app
 from api.Services.user import UserService
 
 
@@ -83,3 +83,8 @@ class UseConfirmResource(Resource):
         username = api.payload.get("username")
         UserService.confirm_user(username)
 
+@api.route('/users/error')
+class UseConfirmResource(Resource):
+    def get(self):
+        app.logger.error("Deu ruim")
+        raise Exception("Error endpoint")
