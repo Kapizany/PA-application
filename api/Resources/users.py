@@ -78,6 +78,7 @@ class UserLoginResource(Resource):
     @api.marshal_with(response_login)
     @api.expect(login_user_input)
     def post(self):
+        logger.info(f'Login payload {api.payload}')
         return UserService.login(api.payload)
 
 
@@ -86,6 +87,7 @@ class UseConfirmResource(Resource):
     @api.expect(confirm_user_input)
     def post(self):
         username = api.payload.get("username")
+        logger.info(f'confirming user {username}')
         UserService.confirm_user(username)
 
 @api.route('/users/error')
