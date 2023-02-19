@@ -6,6 +6,6 @@ from elasticapm.handlers.logging import LoggingHandler
 
 if __name__ == '__main__':
     handler = LoggingHandler(client=apm.client)
-    handler.setLevel(logging.INFO)
+    handler.setLevel(logging.ERROR)
     app.logger.addHandler(handler)
     app.run(host="0.0.0.0", port=8000)

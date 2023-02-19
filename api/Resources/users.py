@@ -2,6 +2,7 @@ from flask_restx import Resource, fields, reqparse
 from werkzeug.datastructures import FileStorage
 from config.api import api, app
 from api.Services.user import UserService
+from config.logs import Logging
 
 
 create_user_parser = reqparse.RequestParser()
@@ -36,11 +37,14 @@ response_login = api.model('ResponseLogin', {
 token_input_parser = reqparse.RequestParser()
 token_input_parser.add_argument('Authorization', location='headers')
 
+logger = Logging(__name__)
+
 
 @api.route('/users/<string:user_id>')
 class UserResource(Resource):
     @api.marshal_with(responser_user)
     def get(self, user_id):
+        logger.info(f"Getting user id ({user_id})")
         return UserService.retrieve_by_id(user_id)
     
 
@@ -52,6 +56,7 @@ class UserResource(Resource):
     def post(self):
         args = create_user_parser.parse_args()
         new_user =  UserService.create(args)
+        logger.info(f"User created succefully ({new_user.username})")
         return {
             "id": new_user.id,
             "email": new_user.email,
@@ -62,7 +67,7 @@ class UserResource(Resource):
     def get(sef):
         args = token_input_parser.parse_args()
         access_token = args.get("Authorization")
-        print(UserService.get_user_by_access_token(access_token))
+        logger.info(UserService.get_user_by_access_token(access_token))
         return {
             "msg": "Token Ok"
         }
@@ -86,5 +91,5 @@ class UseConfirmResource(Resource):
 @api.route('/users/error')
 class UseConfirmResource(Resource):
     def get(self):
-        app.logger.error("Deu ruim")
+        logger.error('Error')
         raise Exception("Error endpoint")
