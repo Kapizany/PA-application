@@ -50,6 +50,7 @@ class UserService:
             db.session.add(new_user)
         except Exception as err:
             db.session.rollback()
+            raise err
         else:
             db.session.commit()
             return new_user

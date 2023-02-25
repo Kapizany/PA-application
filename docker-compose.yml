@@ -1,20 +1,6 @@
 version: '3'
 
 services:
-  api:
-    image: capizani/projeto-aplicado-api
-    # build: .
-    # image: pa-api-image
-    container_name: projeto-aplicado-api
-    command: ./start.sh
-    env_file:
-      - .env
-    ports:
-      - 8000:8000
-    volumes:
-      - .:/api/
-    networks:
-    - observability
   
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.13.0
@@ -32,7 +18,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - ./elasticsearch_data:/usr/share/elasticsearch/data
+      - ./elasticsearch_data:/var/lib/elasticsearch/data
     ports:
       - 9200:9200
     networks:
