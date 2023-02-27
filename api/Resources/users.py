@@ -63,4 +63,4 @@ class UseConfirmResource(Resource):
 class UseConfirmResource(Resource):
     def get(self):
         logger.error('Error')
-        raise Exception("Error endpoint")
+        raise Exception("Error endpoint!")
