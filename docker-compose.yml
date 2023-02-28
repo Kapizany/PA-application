@@ -66,6 +66,7 @@ services:
     - ./.beats/heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml
     environment: 
     - setup.kibana.host=kibana:5601
+    - API_URL=api-alb-1897780285.us-east-1.elb.amazonaws.com
     networks:
     - observability
   
